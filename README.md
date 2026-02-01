@@ -2,10 +2,13 @@
 ### About:
 A collection of scripts that do things. They are TUI-based using "whiptail".
 ### Infos:
-Make scripts executable if needed with: `chmod +x *`.  I assume these scripts should work on most linux-setups, **only `whiptail`** might be something that is not yet installed on your system.
+- Make sure to download the whole repo and not just single scripts (they all depend on `scripts.lib` & `scripts.cfg`).
+- Make scripts executable if needed with: `chmod +x *`.
+- I assume these scripts should work on most linux-setups, **only `whiptail`** might be something that is not yet installed on your system.
+
 
 # ffs.sh (FreeFileSync)
-## Create modified config to remove excluded files:
+## Modify config to remove excluded files:
 This is meant for easy removal of files that were not deleted on the right side before excluding them in FFS (When mirroring from left to right). They can be hard to spot if a lot of changes have been made to the exclusion list. This also works with multiple pairs and separate pair-settings.
 
 ### Usage:
