@@ -1,0 +1,86 @@
+#!/bin/bash
+#[THREAD: SINGLE]
+	thread_single() {
+		cli_echo 104 " [STARTED] ${1} "
+		if thread "${@:2}"; then
+			cli_echo 102 " [SUCCESS] ${1} "
+		else 
+			ERROR=$?; ERRORS+="$ERROR"
+			cli_echo 101 " [ERROR: ${ERROR}] ${1} "
+		fi
+		printf '\7'
+	}
+#[THREAD: MULTI]
+	thread_multi() {
+		process_file() {
+			# Try to run thread
+			if thread "${@}"; then
+				# PIPE_ERRORS if empty
+				: > "$PIPE_ERRORS" &
+				cli_echo 102 " [SUCCESS] PROCESSING: \"${1}.${2}\" "
+			else 
+				ERROR=$?
+				echo "$ERROR" > "$PIPE_ERRORS" &
+				cli_echo 101 " [ERROR: ${ERROR}] PROCESSING: \"${1}.${2}\" "
+			fi
+			printf '\7';
+		}
+		THREADS_ACTIVE=0
+		THREADS_MAX="$(nproc)"
+		PIPE_ERRORS="/tmp/PIPE_ERRORS"
+		rm -rf "$PIPE_ERRORS"
+		mkfifo "$PIPE_ERRORS"
+		# Create list with all files
+		if [[ "${1}" ]]; then while IFS= read -r -d '' FILE; do
+			FILES+=("${FILE}")
+		done < <(find "$@" -type f -print0 2>/dev/null); fi
+		# For each file: +1 thread, start job, if max thread > Wait then -1 thread
+		for FILE in "${FILES[@]}"; do
+			THREADS_ACTIVE=$((THREADS_ACTIVE + 1))
+			# Try to run thread
+			cd "$(dirname "$FILE")" || exit
+			process_file "$(basename "${FILE%.*}")" "${FILE##*.}"  &
+			if [ "$THREADS_ACTIVE" -ge "$THREADS_MAX" ]; then
+				wait -n;  THREADS_ACTIVE=$((THREADS_ACTIVE - 1))
+			fi 
+		done
+		# Wait for all jobs
+		wait; sleep 1
+		while IFS= read -r -t 2 LINE; do
+			ERRORS+=("$LINE")
+		done < "$PIPE_ERRORS"
+	}
+#[CLI: ECHO]
+	cli_echo() {
+		printf "\e[%s;30m%s\e[0m\n" "$1" "$2"
+	}
+#[TUI: MENU]
+	tui_menu() {
+		whiptail --noitem --title "[${SCRIPT_NAME}] ${1}" --menu "" 0 0 0 "${@:2}" 3>&1 1>&2 2>&3
+	}
+#[TUI: CHECKLIST]
+	tui_checklist() {
+		whiptail --separate-output --title "[${SCRIPT_NAME}] ${1}" --checklist "" 0 96 0 "${@:2}" 3>&1 1>&2 2>&3
+	}
+#[TUI: TEXT PROMPT]
+	tui_textprompt() {
+		whiptail --noitem --title "[${SCRIPT_NAME}] ${1}" --inputbox "${2}" 0 0 3>&1 1>&2 2>&3
+	}
+#[TUI: INFO]
+	tui_info() {
+		whiptail --title "[${SCRIPT_NAME}] ${SCRIPT_JOB}" --msgbox "${1}" 0 0 3>&1 1>&2 2>&3
+	}
+#[TUI: INFO RESULTS]
+	tui_info_results() {
+		if [[ "${ERRORS[*]}" ]]; then
+			tui_info "Job completed with Errors:\n${ERRORS[*]}"
+		else
+			tui_info "Job completed successfully!"
+		fi
+		exit
+	}
+#[INIT]
+	clear
+	echo "${1}"
+	SCRIPT_PATH="$(pwd)"
+	if ! source "${SCRIPT_PATH}/scripts.cfg"; then tui_info "\"script.cfg\" missing."; exit; fi
