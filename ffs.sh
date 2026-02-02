@@ -2,8 +2,8 @@
 	source "$(pwd)/scripts.lib" || exit
 
 #[LOAD CONFIG]
-	SCRIPT_NAME="ffs"
-	SCRIPT_JOB="Launch with config that removes exclusions in destination-folder"
+	SCRIPT_NAME="FreeFileSync"
+	SCRIPT_JOB="Launch with modified config"
 	if [[ -z "${FFS_PATH_BIN:-}" ]]; then tui_info "FFS_PATH_BIN missing in ffs.cfg"; exit; fi
 
 #[CREATE MODIFIED CONFIG]
@@ -66,3 +66,4 @@
 	thread() { ${FFS_PATH_BIN} "${SCRIPT_PATH}/.tmp/TEMPORARY-CONFIG.ffs_gui" -Edit; }
 	thread_single "Launching FreeFileSync"
 	rm -rf "${SCRIPT_PATH}/.tmp"
+	tui_info_results

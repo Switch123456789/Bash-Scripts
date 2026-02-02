@@ -81,6 +81,5 @@
 	}
 #[INIT]
 	clear
-	echo "${1}"
 	SCRIPT_PATH="$(pwd)"
 	if ! source "${SCRIPT_PATH}/scripts.cfg"; then tui_info "\"script.cfg\" missing."; exit; fi
