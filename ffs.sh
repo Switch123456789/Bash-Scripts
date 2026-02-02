@@ -1,7 +1,5 @@
 #!/bin/bash
 	source "$(pwd)/scripts.lib" || exit
-
-#[LOAD CONFIG]
 	SCRIPT_NAME="FreeFileSync"
 	SCRIPT_JOB="Launch with modified config"
 	if [[ -z "${FFS_PATH_BIN:-}" ]]; then tui_info "FFS_PATH_BIN missing in ffs.cfg"; exit; fi
