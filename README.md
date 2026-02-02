@@ -14,7 +14,7 @@ It creates a modified copy of your `.ffs_gui`-file, by pointing the left side to
 - Make sure **`FFS_PATH_BIN` is set** in `scripts.cfg`  accordingly.
 
 ### Usage:
-2. **Start script** with `./ffs.sh "/path/to/config_file.ffs_gui"`, this will open FFS with a modified .ffs_gui file.
+1. **Start script** with `./ffs.sh "/path/to/config_file.ffs_gui"`, this will open FFS with a modified `.ffs_gui` file.
 5. **Click `Compare`** and all leftover files should show up.
 6. **Quadruple-check** if those files can be deleted safely (It works perfectly for me, but I didn't do a whole lot of testing).
 7. **Click `Synchronize`** to delete them.
