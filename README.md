@@ -5,9 +5,12 @@
 
 # ffs.sh (FreeFileSync)
 ## Modify FFS-config to delete excluded files:
-This script assists in deleting excluded files from the right side(s) of a FFS-config. If you're mirroring from left to right and sometimes add exclusions that have been synced before, you potentially end up with unwanted files on the right side that will rot there until eternity unless you delete them manually one by one.
+### The problem:
+If you're mirroring from left to right and sometimes add exclusions that have been synced before, you potentially end up with unwanted files on the right side that will rot there until eternity unless you delete them manually one by one.
 
-It creates a modified copy of your `.ffs_gui`-file, by pointing the left side to an empty folder and turning all exclusions into inclusions. This creates a scenario in which FFS mirrors "nothing" to all originally excluded files and therefore deleting them on the right side when executing the Synchronization.
+### The solution:
+
+This script allows you to delete them automatically. Simply run it with your `.ffs_gui`-file as parameter. It will create a modified copy of it, by pointing the left side to an empty folder and turning all exclusions into inclusions. This creates a scenario in which FFS mirrors "nothing" to all originally excluded files and therefore deleting them on the right side when executing the synchronization.
 
 ### Requirements:
 - Make sure **whiptail is installed**.
