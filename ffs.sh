@@ -2,7 +2,7 @@
 	source "$(pwd)/scripts.lib" || exit
 	SCRIPT_NAME="FreeFileSync"
 	SCRIPT_JOB="Launch with modified config"
-	if [[ -z "${FFS_PATH_BIN:-}" ]]; then tui_info "FFS_PATH_BIN missing in ffs.cfg"; exit; fi
+	if [[ -z "${FFS_PATH_BIN:-}" ]]; then tui_info "FFS_PATH_BIN missing in scripts.cfg"; exit; fi
 
 #[CREATE MODIFIED CONFIG]
 	# Create an empty folder that can be mirrored to the destination
